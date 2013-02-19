@@ -1,0 +1,36 @@
+#
+# Linux ADK
+#
+
+# Introduction
+---------------
+This software aims to turn your GNU/Linux machine into an Android Accessory.
+It initializes any Android device connected via USB as detailed on Android website:
+http://source.android.com/tech/accessories/aoap/aoa.html
+As of today (alpha v0.1), the software can be used as starting point for other applications.
+Later on, linux-adk binary will be calling "accessory_main" function from an
+external library so both initialization and accessory-specific aspects can be separated.
+
+# How to build linux-adk
+-------------------------
+As of today (alpha v0.1), Autoconf has not been used yet. Therefore the build is as follow:
+$> make
+
+This software requires the use of libusb and libasound.
+
+For cross-compiling, several environment variables must be set manually:
+$> export ARCH=arm
+$> export CROSS_COMPILE=arm-bcm2708hardfp-linux-gnueabi-
+$> export CFLAGS="-I<path_to_libusb_headers> -I<path_to_libasound_headers>"
+$> export LDFLAGS="-L<path_to_libusb> -L<path_to_libasound>"
+$> make
+
+# license
+----------
+linux-adk is distributed under the term of the General Public License version 2 (GPLv2)
+See gpl-2.0.txt for the full license content
+
+# author
+----------
+Gary Bisson <bisson.gary@gmail.com>
+
