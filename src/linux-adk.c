@@ -22,12 +22,15 @@
 #include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <signal.h>
 
 #include <libusb.h>
 
 #include "linux-adk.h"
 
 extern void accessory_main(accessory_t * acc);
+
+int stop_acc = 0;
 
 static const accessory_t acc_default = {
 	.device = "18d1:4e42",
@@ -75,6 +78,12 @@ static void show_version(char *name)
 	return;
 }
 
+static void signal_handler(int signo)
+{
+	printf("SIGINT: Closing accessory\n");
+	stop_acc = 1;
+}
+
 int main(int argc, char *argv[])
 {
 	int arg_count = 1;
@@ -82,6 +91,9 @@ int main(int argc, char *argv[])
 	accessory_t acc = { NULL, NULL, 0, 0, 0, NULL, NULL, NULL, NULL, NULL,
 		NULL, NULL
 	};
+
+	if (signal(SIGINT, signal_handler) == SIG_ERR)
+		printf("Cannot setup a signal handler...\n");
 
 	/* Parse all parameters */
 	while (arg_count < argc) {

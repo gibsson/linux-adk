@@ -71,6 +71,9 @@
 #define PACKAGE_VERSION		"0.1"
 #define PACKAGE_BUGREPORT	"bisson.gary@gmail.com"
 
+/* Variable to stop accessory */
+extern int stop_acc;
+
 /* Structures */
 typedef struct _accessory_t {
 	struct libusb_device_handle *handle;

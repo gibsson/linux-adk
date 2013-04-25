@@ -142,13 +142,15 @@ accessory:
 		}
 
 		/* Snooping loop; Display every data received from device */
-		while (1) {
+		while (!stop_acc) {
 			ret =
 			    libusb_bulk_transfer(acc->handle,
 						 AOA_ACCESSORY_EP_IN, acc_buf,
 						 sizeof(acc_buf), &transferred,
-						 0);
+						 200);
 			if (ret < 0) {
+				if (ret == LIBUSB_ERROR_TIMEOUT)
+					continue;
 				printf("bulk transfer error %d\n", ret);
 				if (--errors == 0)
 					break;
@@ -196,7 +198,7 @@ static void *thread_write(void *ptr)
 	printf("%s: created internal buffer of size = %i\n", __func__,
 	       buffer_size);
 
-	while (1) {
+	while (!stop_acc) {
 		int count = buffer_read_avail(buffer);
 #ifdef AUDIO_DEBUG
 		double percentage_full = count;
@@ -218,7 +220,7 @@ static void *thread_write(void *ptr)
 
 		/* Read from circular buffer */
 		int done = 0;
-		while (1) {
+		while (!stop_acc) {
 			done += buffer_read(buffer, data + done, count - done);
 			if (done >= count) {
 				break;
@@ -252,7 +254,6 @@ end:
 	printf("INFO: DONE\n");
 
 	pthread_exit(NULL);
-	return NULL;
 }
 
 static void audio_callback(struct libusb_transfer *transfer)
@@ -273,7 +274,7 @@ static void audio_callback(struct libusb_transfer *transfer)
 			       transfer->iso_packet_desc[i].actual_length);
 #endif
 			written = 0;
-			while (1) {
+			while (!stop_acc) {
 				written += buffer_write(buffer,
 							buf + written,
 							transfer->
