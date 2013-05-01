@@ -68,7 +68,7 @@
 /* #define AUDIO_DEBUG */
 
 /* App defines */
-#define PACKAGE_VERSION		"0.1"
+#define PACKAGE_VERSION		"0.2"
 #define PACKAGE_BUGREPORT	"bisson.gary@gmail.com"
 
 /* Variable to stop accessory */

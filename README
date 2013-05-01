@@ -20,7 +20,7 @@ This software requires the use of libusb and libasound.
 
 For cross-compiling, several environment variables must be set manually:
 $> export ARCH=arm
-$> export CROSS_COMPILE=arm-bcm2708hardfp-linux-gnueabi-
+$> export CROSS_COMPILE=<custom_toolchain>
 $> export CFLAGS="-I<path_to_libusb_headers> -I<path_to_libasound_headers>"
 $> export LDFLAGS="-L<path_to_libusb> -L<path_to_libasound>"
 $> make

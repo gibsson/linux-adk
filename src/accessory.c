@@ -47,8 +47,8 @@ void accessory_main(accessory_t * acc)
 		/* Depending on the product id the endpoint is not the same */
 		if ((acc->pid == AOA_AUDIO_PID)
 		    || (acc->pid == AOA_AUDIO_ADB_PID)) {
-			endpoint = AOA_AUDIO_NO_APP_EP;
-			interface = AOA_AUDIO_NO_APP_INTERFACE;
+			printf("Device should now be recognized as valid ALSA card...\n");
+			return;
 		} else {
 			endpoint = AOA_AUDIO_EP;
 			interface = AOA_AUDIO_INTERFACE;
