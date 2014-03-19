@@ -11,14 +11,11 @@ endif
 
 SHELL = /bin/sh
 
-
-top_srcdir	= .
 srcdir		= src
 objdir		= obj
 prefix		= $(DESTDIR)/usr/local
 exec_prefix	= $(DESTDIR)/${prefix}
 bindir		= $(exec_prefix)/bin
-docdir		= $(prefix)/share/doc/linux-adk
 
 CC			= $(CROSS_COMPILE)gcc
 INSTALL		= install
@@ -54,11 +51,6 @@ $(objdir)/%.o: $(srcdir)/%.c
 	$P '  CC       $@'
 	$E $(CC) $(CFLAGS) -c -o $@ $^
 
-.PHONY: doc
-doc:
-	$P '  DOC      '
-	$E doxygen doxygen.cfg
-
 .PHONY: clean
 clean:
 	$P '  RM       TARGET'
@@ -66,29 +58,13 @@ clean:
 	$P '  RM       OBJS'
 	$E rm -rf $(objdir) 
 
-.PHONY: distclean
-distclean: clean
-	$P '  RM       Makefile'
-	$E rm -f Makefile
-	$P '  RM       doc'
-	$E rm -fr doc
-	$P '  RM       config.*'
-	$E rm -f src/config.h config.status config.cache config.log
-	$P '  RM       cache'
-	$E rm -fr autom4te.cache
-
 install:
 	$P '  MKDIRS   '
 	$E $(MKDIR) $(bindir)
-	$E $(MKDIR) $(mandir)
-	$E $(MKDIR) $(docdir)
 	$P '  INSTALL  $(TARGET)'
 	$E $(INSTALL) $(TARGET) $(bindir)
-	$P '  INSTALL  README'
-	$E $(INSTALL) README $(docdir)
 
 uninstall:
 	$P '  UNINSTALL'
 	$E rm -f $(bindir)/$(TARGET)
-	$E rm -f $(docdir)/README
 
