@@ -30,7 +30,7 @@
 
 extern void accessory_main(accessory_t * acc);
 
-int stop_acc = 0;
+volatile int stop_acc = 0;
 
 static const accessory_t acc_default = {
 	.device = "18d1:4e42",

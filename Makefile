@@ -37,9 +37,7 @@ CFLAGS		+= -Wall -Wextra -Wno-char-subscripts -Wno-unused-parameter -Wno-format
 CFLAGS		+= $(ARCH_CFLAGS)
 
 OBJ 		= $(objdir)/linux-adk.o \
-			  $(objdir)/accessory.o \
-			  $(objdir)/audio.o \
-			  $(objdir)/buffer.o
+			  $(objdir)/accessory.o
 
 TARGET		= linux-adk
 

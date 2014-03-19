@@ -54,25 +54,13 @@
 #define AOA_ACCESSORY_EP_IN		0x81
 #define AOA_ACCESSORY_EP_OUT		0x02
 #define AOA_ACCESSORY_INTERFACE		0x00
-#define AOA_AUDIO_EP			0x83
-#define AOA_AUDIO_NO_APP_EP		0x81
-#define AOA_AUDIO_INTERFACE		0x02
-#define AOA_AUDIO_NO_APP_INTERFACE	0x01
-
-/* Audio defines */
-#define AUDIO_BUFFER_SIZE		(100*1024)
-#define AUDIO_SLEEP_TIME		1000
-#define AUDIO_NUM_ISO_PACKETS		10
-#define AUDIO_BUFFER_FRAMES		128
-#define AUDIO_ALT_SETTING		1
-/* #define AUDIO_DEBUG */
 
 /* App defines */
-#define PACKAGE_VERSION		"0.2"
+#define PACKAGE_VERSION		"0.3"
 #define PACKAGE_BUGREPORT	"bisson.gary@gmail.com"
 
 /* Variable to stop accessory */
-extern int stop_acc;
+extern volatile int stop_acc;
 
 /* Structures */
 typedef struct _accessory_t {
