@@ -26,15 +26,24 @@
 #include <libusb.h>
 
 #include "linux-adk.h"
+#include "hid.h"
 
 void accessory_main(accessory_t * acc)
 {
 	int ret = 0;
+	hid_device hid;
 
-	/* In case of Audio support */
+	/* In case of Audio/HID support */
 	if (acc->pid >= AOA_AUDIO_PID) {
+		/* Audio warning */
 		printf("Device should now be recognized as valid ALSA card...\n");
 		printf("  => arecord -l\n");
+
+		/* HID handling */
+		if(search_hid(&hid) == 0) {
+			register_hid_callback(acc, &hid);
+			send_hid_descriptor(acc, &hid);
+		}
 	}
 
 	/* If we have an accessory interface */
@@ -78,4 +87,7 @@ void accessory_main(accessory_t * acc)
 			printf("\n");
 		}
 	}
+
+	if ((acc->pid >= AOA_AUDIO_PID) && (hid.handle))
+		pthread_join(hid.rx_thread, NULL);
 }

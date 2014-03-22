@@ -33,8 +33,9 @@ CFLAGS		+= -Isrc -I/usr/include/libusb-1.0
 CFLAGS		+= -Wall -Wextra -Wno-char-subscripts -Wno-unused-parameter -Wno-format
 CFLAGS		+= $(ARCH_CFLAGS)
 
-OBJ 		= $(objdir)/linux-adk.o \
-			  $(objdir)/accessory.o
+OBJ 		= $(objdir)/accessory.o \
+			  $(objdir)/hid.o \
+			  $(objdir)/linux-adk.o
 
 TARGET		= linux-adk
 
