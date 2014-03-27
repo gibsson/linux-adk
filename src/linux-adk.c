@@ -32,14 +32,17 @@ extern void accessory_main(accessory_t * acc);
 
 volatile int stop_acc = 0;
 
+/* Filter details for Jesse's application:
+ * https://github.com/jdannenbring/android-arm-accessory-app.git
+ */
 static const accessory_t acc_default = {
 	.device = "18d1:4e42",
-	.manufacturer = "Google, Inc.",
-	.model = "DemoKit",
-	.description = "Demo ABS2013",
-	.version = "2.0",
-	.url = "https://github.com/gibsson",
-	.serial = "0000000012345678",
+	.manufacturer = "Freescale",
+	.model = "iMX6Q",
+	.description = "Description",
+	.version = "SabreLite",
+	.url = "http://www.adeneo-embedded.com",
+	.serial = "2254711SerialNo.",
 };
 
 static int is_accessory_present(accessory_t * acc);

@@ -24,15 +24,28 @@
 #include <unistd.h>
 
 #include <libusb.h>
+#include <SDL_image.h>
 
 #include "linux-adk.h"
 #include "hid.h"
+
+static char *images[] = {
+	"freescale.jpg",
+	"blown-away-android.jpg",
+	"droid.jpg",
+	"freescale_round.jpg",
+	"android_skateboard.jpg",
+	"Wikinews_Reader.jpg",
+	"sabrelite.jpg",
+	"droid_happy.jpg",
+	"angry_birds_android.jpg",
+};
 
 void accessory_main(accessory_t * acc)
 {
 	int ret = 0;
 	hid_device hid;
-
+#if 0
 	/* In case of Audio/HID support */
 	if (acc->pid >= AOA_AUDIO_PID) {
 		/* Audio warning */
@@ -45,12 +58,14 @@ void accessory_main(accessory_t * acc)
 			send_hid_descriptor(acc, &hid);
 		}
 	}
-
+#endif
 	/* If we have an accessory interface */
 	if ((acc->pid != AOA_AUDIO_ADB_PID) && (acc->pid != AOA_AUDIO_PID)) {
 		uint8_t acc_buf[512];
-		int transferred, i;
+		int transferred;
 		int errors = 20;
+		int index = -1;
+		SDL_Surface *screen;
 
 		/* Claiming first (accessory )interface from the opened device */
 		ret =
@@ -61,8 +76,23 @@ void accessory_main(accessory_t * acc)
 			return;
 		}
 
+		if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+			printf("Couldn't initialise SDL: %i\n", SDL_GetError());
+			return;
+		}
+
+		atexit(SDL_Quit);
+
+		screen=SDL_SetVideoMode(1024, 768, 16, SDL_SWSURFACE);
+		if (screen == NULL) {
+			printf("Couldn't set video mode: %s\n", SDL_GetError());
+			return;
+		}
+
 		/* Snooping loop; Display every data received from device */
 		while (!stop_acc) {
+			SDL_Surface *image = NULL;
+
 			ret =
 			    libusb_bulk_transfer(acc->handle,
 						 AOA_ACCESSORY_EP_IN, acc_buf,
@@ -78,13 +108,30 @@ void accessory_main(accessory_t * acc)
 					sleep(1);
 			}
 
-			printf("Received %d bytes\n", transferred);
-			for (i = 0; i < transferred;) {
-				printf("%#2.2x ", acc_buf[i++]);
-				if (!(i % 8))
-					printf("\n");
+			if (acc_buf[0] == 0x6E) {
+				if (++index > 8)
+					index = 0;
+				printf("Next picture: %s\n", images[index]);
+				image = IMG_Load(images[index]);
+			} else if (acc_buf[0] == 0x70) {
+				if (--index < 0)
+					index = 8;
+				printf("Previous picture: %s\n", images[index]);
+				image = IMG_Load(images[index]);
+			} else {
+				acc_buf[transferred] = '\0';
+				printf("%s\n", acc_buf);
 			}
-			printf("\n");
+
+			if (image != NULL) {
+				SDL_Rect rcDest = {0, 0, 0, 0};
+				SDL_FillRect(screen, NULL, 0x000000);
+				SDL_BlitSurface(image, NULL, screen, &rcDest);
+				SDL_UpdateRects(screen, 1, &rcDest);
+				SDL_FreeSurface(image);
+			}
+
+			SDL_Flip(screen);
 		}
 	}
 

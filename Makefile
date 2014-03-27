@@ -21,7 +21,7 @@ CC			= $(CROSS_COMPILE)gcc
 INSTALL		= install
 MKDIR		= mkdir -p
 
-LIBS		=  -lusb-1.0 -lasound -lpthread
+LIBS		=  -lusb-1.0 -lpthread -lSDL -lSDL_image -lts -ljpeg
 CFLAGS		+= -g -O0
 LDFLAGS 	+= 
 CPPFLAGS	+= 
@@ -29,7 +29,10 @@ CPPFLAGS	+=
 ARCH		?= $(ARCH_x86_64)
 ARCH_CFLAGS	?= $(CFLAGS_x86_64)
 
-CFLAGS		+= -Isrc -I/usr/include/libusb-1.0
+CFLAGS		+= -Isrc
+CFLAGS		+= -I$(TARGET_SYSROOT)/usr/include
+CFLAGS		+= -I$(TARGET_SYSROOT)/usr/include/libusb-1.0
+CFLAGS		+= -I$(TARGET_SYSROOT)/usr/include/SDL
 CFLAGS		+= -Wall -Wextra -Wno-char-subscripts -Wno-unused-parameter -Wno-format
 CFLAGS		+= $(ARCH_CFLAGS)
 
