@@ -21,10 +21,10 @@ CC			= $(CROSS_COMPILE)gcc
 INSTALL		= install
 MKDIR		= mkdir -p
 
-LIBS		=  -lusb-1.0 -lasound -lpthread
+LIBS		=  -lusb-1.0 -lpthread
 CFLAGS		+= -g -O0
-LDFLAGS 	+= 
-CPPFLAGS	+= 
+LDFLAGS 	+=
+CPPFLAGS	+=
 
 ARCH		?= $(ARCH_x86_64)
 ARCH_CFLAGS	?= $(CFLAGS_x86_64)
@@ -57,7 +57,7 @@ clean:
 	$P '  RM       TARGET'
 	$E rm -f $(TARGET)
 	$P '  RM       OBJS'
-	$E rm -rf $(objdir) 
+	$E rm -rf $(objdir)
 
 install:
 	$P '  MKDIRS   '
