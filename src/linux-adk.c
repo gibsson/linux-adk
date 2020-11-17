@@ -43,13 +43,15 @@ static const accessory_t acc_default = {
 };
 
 static int is_accessory_present(accessory_t * acc);
-static int init_accessory(accessory_t * acc);
+static int init_accessory(accessory_t * acc, int aoa_max_version);
 static void fini_accessory(accessory_t * acc);
 
 static void show_help(char *name)
 {
 	printf
 	    ("Linux Accessory Development Kit\n\nusage: %s [OPTIONS]\nOPTIONS:\n"
+	     "\t-a, --aoa-max-version\n\t\tAOA maximum version to be used. "
+	     "Default is no maximum version.\n"
 	     "\t-d, --device\n\t\tUSB device product and vendor IDs. "
 	     "Default is \"18d1:4e42\" (Nexus7).\n"
 	     "\t-D, --description\n\t\taccessory description. "
@@ -88,6 +90,7 @@ int main(int argc, char *argv[])
 {
 	int arg_count = 1;
 	int no_app = 0;
+	int aoa_max_version = -1;
 	accessory_t acc = { NULL, NULL, 0, 0, 0, NULL, NULL, NULL, NULL, NULL,
 		NULL, NULL
 	};
@@ -97,8 +100,11 @@ int main(int argc, char *argv[])
 
 	/* Parse all parameters */
 	while (arg_count < argc) {
-		if ((strcmp(argv[arg_count], "-d") == 0)
-		    || (strcmp(argv[arg_count], "--device") == 0)) {
+		if ((strcmp(argv[arg_count], "-a") == 0)
+		    || (strcmp(argv[arg_count], "--aoa-max-version") == 0)) {
+			aoa_max_version= atoi(argv[++arg_count]);
+		} else if ((strcmp(argv[arg_count], "-d") == 0)
+			   || (strcmp(argv[arg_count], "--device") == 0)) {
 			acc.device = argv[++arg_count];
 		} else if ((strcmp(argv[arg_count], "-D") == 0)
 			   || (strcmp(argv[arg_count], "--description")
@@ -151,7 +157,7 @@ int main(int argc, char *argv[])
 	if (!acc.url)
 		acc.url = acc_default.url;
 
-	if (init_accessory(&acc) != 0)
+	if (init_accessory(&acc, aoa_max_version) != 0)
 		goto end;
 
 	accessory_main(&acc);
@@ -161,7 +167,7 @@ end:
 	return 0;
 }
 
-static int init_accessory(accessory_t * acc)
+static int init_accessory(accessory_t * acc, int aoa_max_version)
 {
 	int ret;
 	uint16_t pid, vid;
@@ -204,6 +210,10 @@ static int init_accessory(accessory_t * acc)
 	} else {
 		acc->aoa_version = ((buffer[1] << 8) | buffer[0]);
 		printf("Device supports AOA %d.0!\n", acc->aoa_version);
+	}
+	if ((aoa_max_version > 0) && ((int)acc->aoa_version > aoa_max_version)) {
+		acc->aoa_version = aoa_max_version;
+		printf("Limiting AOA to version %d.0!\n", acc->aoa_version);
 	}
 
 	/* Some Android devices require a waiting period between transfer calls */
