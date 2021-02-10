@@ -21,16 +21,18 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include <unistd.h>
 
 #include <libusb.h>
 
 #include "linux-adk.h"
+#ifndef WIN32
 #include "hid.h"
+#endif
 
 void accessory_main(accessory_t * acc)
 {
 	int ret = 0;
+#ifndef WIN32
 	hid_device hid;
 
 	/* In case of Audio/HID support */
@@ -45,7 +47,7 @@ void accessory_main(accessory_t * acc)
 			send_hid_descriptor(acc, &hid);
 		}
 	}
-
+#endif
 	/* If we have an accessory interface */
 	if ((acc->pid != AOA_AUDIO_ADB_PID) && (acc->pid != AOA_AUDIO_PID)) {
 		uint8_t acc_buf[512];
@@ -87,7 +89,8 @@ void accessory_main(accessory_t * acc)
 			printf("\n");
 		}
 	}
-
+#ifndef WIN32
 	if ((acc->pid >= AOA_AUDIO_PID) && (hid.handle))
 		pthread_join(hid.rx_thread, NULL);
+#endif
 }

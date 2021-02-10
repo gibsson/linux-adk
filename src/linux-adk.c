@@ -21,7 +21,6 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include <unistd.h>
 #include <signal.h>
 
 #include <libusb.h>
@@ -156,7 +155,10 @@ int main(int argc, char *argv[])
 		acc.serial = acc_default.serial;
 	if (!acc.url)
 		acc.url = acc_default.url;
-
+#ifdef WIN32
+	/* AOA 2.0 not supported on Windows (pthread/hid/audio deps) */
+	aoa_max_version = 1;
+#endif
 	if (init_accessory(&acc, aoa_max_version) != 0)
 		goto end;
 

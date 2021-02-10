@@ -22,6 +22,12 @@
 #define _LINUX_ADK_H_
 
 #include <stdint.h>
+#ifndef WIN32
+#include <unistd.h>
+#else
+#define sleep(x) Sleep(x * 1000)
+#define usleep(x) Sleep(x / 1000)
+#endif
 
 /* Android Open Accessory protocol defines */
 #define AOA_GET_PROTOCOL		51
