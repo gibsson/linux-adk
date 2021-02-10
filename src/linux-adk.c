@@ -30,6 +30,7 @@
 extern void accessory_main(accessory_t * acc);
 
 volatile int stop_acc = 0;
+int verbose = 0;
 
 static const accessory_t acc_default = {
 	.device = "18d1:4e42",
@@ -68,6 +69,7 @@ static void show_help(char *name)
 	     "\t-u, --url\n\t\taccessory url. "
 	     "Default is \"https://github.com/gibsson\".\n"
 	     "\t-v, --version\n\t\tShow program version and exit.\n"
+	     "\t-V, --verbose\n\t\tSets libusb verbose mode.\n"
 	     "\t-h, --help\n\t\tShow this help and exit.\n", name);
 	return;
 }
@@ -136,6 +138,9 @@ int main(int argc, char *argv[])
 			   || (strcmp(argv[arg_count], "--version") == 0)) {
 			show_version(argv[0]);
 			exit(1);
+		} else if ((strcmp(argv[arg_count], "-V") == 0)
+			   || (strcmp(argv[arg_count], "--verbose") == 0)) {
+			verbose = 1;
 		} else {
 			show_help(argv[0]);
 			exit(1);
@@ -186,6 +191,8 @@ static int init_accessory(accessory_t * acc, int aoa_max_version)
 		printf("libusb init failed: %d\n", ret);
 		return ret;
 	}
+	if (verbose)
+		libusb_set_option(NULL, LIBUSB_OPTION_LOG_LEVEL, LIBUSB_LOG_LEVEL_DEBUG);
 
 	/* Check if device is not already in accessory mode */
 	if (is_accessory_present(acc))
