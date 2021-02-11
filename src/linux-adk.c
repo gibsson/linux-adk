@@ -97,6 +97,9 @@ int main(int argc, char *argv[])
 	if (signal(SIGINT, signal_handler) == SIG_ERR)
 		printf("Cannot setup a signal handler...\n");
 
+	/* Disable buffering on stdout */
+	setbuf(stdout, NULL);
+
 	/* Parse all parameters */
 	while (arg_count < argc) {
 		if ((strcmp(argv[arg_count], "-a") == 0)
