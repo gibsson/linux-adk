@@ -35,9 +35,9 @@ int verbose = 0;
 static const accessory_t acc_default = {
 	.device = "18d1:4e42",
 	.manufacturer = "Google, Inc.",
-	.model = "DemoKit",
-	.description = "Demo ABS2013",
-	.version = "2.0",
+	.model = "AccessoryChat",
+	.description = "Sample Program",
+	.version = "1.0",
 	.url = "https://github.com/gibsson",
 	.serial = "0000000012345678",
 };
@@ -53,24 +53,27 @@ static void show_help(char *name)
 	     "\t-a, --aoa-max-version\n\t\tAOA maximum version to be used. "
 	     "Default is no maximum version.\n"
 	     "\t-d, --device\n\t\tUSB device product and vendor IDs. "
-	     "Default is \"18d1:4e42\" (Nexus7).\n"
+	     "Default is \"%s\".\n"
 	     "\t-D, --description\n\t\taccessory description. "
-	     "Default is \"Demo ABS2013\".\n"
+	     "Default is \"%s\".\n"
 	     "\t-m, --manufacturer\n\t\tmanufacturer's name. "
-	     "Default is \"Google, Inc.\".\n"
+	     "Default is \"%s\".\n"
 	     "\t-M, --model\n\t\tmodel's name. "
-	     "Default is \"DemoKit\".\n"
+	     "Default is \"%s\".\n"
 	     "\t-n, --vernumber\n\t\taccessory version number. "
-	     "Default is \"1.0\".\n"
+	     "Default is \"%s\".\n"
 	     "\t-N, --no_app\n\t\toption that allows to connect without an "
 	     "Android App (AOA v2.0 only, for Audio and HID).\n"
 	     "\t-s, --serial\n\t\tserial numder. "
-	     "Default is \"007\".\n"
+	     "Default is \"%s\".\n"
 	     "\t-u, --url\n\t\taccessory url. "
-	     "Default is \"https://github.com/gibsson\".\n"
+	     "Default is \"%s\".\n"
 	     "\t-v, --version\n\t\tShow program version and exit.\n"
 	     "\t-V, --verbose\n\t\tSets libusb verbose mode.\n"
-	     "\t-h, --help\n\t\tShow this help and exit.\n", name);
+	     "\t-h, --help\n\t\tShow this help and exit.\n", name,
+	     acc_default.device, acc_default.description,
+	     acc_default.manufacturer, acc_default.model, acc_default.version,
+	     acc_default.serial, acc_default.url);
 	return;
 }
 
