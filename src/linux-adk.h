@@ -62,7 +62,7 @@
 #define AOA_ACCESSORY_INTERFACE		0x00
 
 /* App defines */
-#define PACKAGE_VERSION		"0.3"
+#define PACKAGE_VERSION		"0.4"
 #define PACKAGE_BUGREPORT	"bisson.gary@gmail.com"
 
 /* Variable to stop accessory */
