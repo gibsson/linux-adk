@@ -53,11 +53,13 @@ First you need to download the dependencies:
 $ sudo apt install libusb-1.0-0-dev build-essential
 ```
 As of today (alpha v0.4), `autotools` have not been configured.
+
 Therefore the build is done manually as follow:
 ```
 $ make
 ```
 This software requires the use of `libusb`.
+
 For cross-compiling, several environment variables must be set manually:
 ```
 $ export ARCH=arm
@@ -80,6 +82,18 @@ https://github.com/libusb/libusb/blob/master/msvc/libusb_2019.sln
 3) Download and build `linux-adk` using this solution:
 
 https://github.com/gibsson/linux-adk/blob/master/msvc/linux-adk.sln
+
+Couple of things to note for `linux-adk.exe` to work properly on Windows:
+1) First make sure that `adb` is not running, otherwise `linux-adk` won't be able to get the endpoint.
+
+```
+$ adb kill-server
+```
+
+2) Once the platform switches to Accessory mode, make sure in the *Device Manager* that the device driver is:
+
+    - *Manufacturer*: WinUsb Device
+    - *Model*: ADB Device
 
 ## License
 
